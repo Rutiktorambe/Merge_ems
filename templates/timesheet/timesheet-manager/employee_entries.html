@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekly Entries for Employee ID: {{ emp_id }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/timesheet/employee_entries/employee_entries.css') }}"
+    />
+    <style></style>
+  </head>
+  <body>
+    {% include 'navbar/navbar.html' %}
+    <nav class="ts-nav-container">
+      <div class="ts-nav-center">
+        <a onclick="history.back(-1)" class="ts-nav-link">Go Back</a>
+        <a href="/timesheet" class="ts-nav-link">Timesheet</a>
+      </div>
+    </nav>
+    <div class="ts-manager-emp-body">
+      <div class="ts-manager-emp-entries-container">
+        <h1 class="ts-manager-emp-entries-header">
+          Weekly Entries for Employee ID: {{ emp_id }}
+        </h1>
+
+        <div class="ts-manager-emp-entries-navigation">
+          <a
+            href="{{ url_for('employee_entries', emp_id=emp_id, selected_date=prev_week_date) }}"
+            class="ts-manager-emp-entries-btn"
+          >
+            Previous Week
+          </a>
+          <span>{{ week_start }} - {{ week_end }}</span>
+          <a
+            href="{{ url_for('employee_entries', emp_id=emp_id, selected_date=next_week_date) }}"
+            class="ts-manager-emp-entries-btn"
+          >
+            Next Week
+          </a>
+        </div>
+
+        <table class="ts-manager-emp-entries-table">
+          <tr>
+            <th>Day</th>
+            <th>Date</th>
+            <th>Total Time</th>
+            <th>Allocation Type</th>
+            <th>Comments</th>
+            <th>Project Code</th>
+          </tr>
+
+          {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+          "Saturday", "Sunday"] %}
+          <tr>
+            <td>{{ day }}</td>
+            {% set entry = entries_by_date | selectattr('day', 'equalto', day) |
+            first %} {% if entry %}
+            <td>{{ entry.date }}</td>
+            <td>{{"%.2f" | format(entry.hours + (entry.minutes/60))}}</td>
+            <td>{{ entry.allocation_type }}</td>
+            <td>{{ entry.comments }}</td>
+            <td>{{ entry.project_code }}</td>
+            {% else %}
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </table>
+
+        {% if not entries_by_date %}
+        <p class="ts-manager-emp-entries-message">
+          No entries found for this week.
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

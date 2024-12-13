@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting...</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+      }
+      .container {
+        text-align: center;
+      }
+      .timer {
+        font-size: 2rem;
+        color: #007bff;
+      }
+    </style>
+    <script>
+      // Function to handle redirection
+      function redirect() {
+        const url = "https://youtube.com"; // Replace with your target URL
+        let countdown = 5;
+        const timerElement = document.getElementById("timer");
+
+        const interval = setInterval(() => {
+          countdown--;
+          timerElement.textContent = countdown;
+          if (countdown === 0) {
+            clearInterval(interval);
+            window.location.href = url; // Redirect to the target URL
+          }
+        }, 1000);
+      }
+      window.onload = redirect;
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Redirecting in <span id="timer">5</span> seconds...</h1>
+      <p>
+        If you are not redirected, <a href="https://example.com">click here</a>.
+      </p>
+    </div>
+  </body>
+</html>

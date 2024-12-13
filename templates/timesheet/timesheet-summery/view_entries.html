@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Entries for {{ date }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/timesheet/view_entries.css') }}"
+    />
+  </head>
+  <style>
+    /* Overlay for the confirmation box */
+    .confirmation-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    /* Confirmation box */
+    .confirmation-box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    /* Confirmation text */
+    .confirmation-box p {
+      margin: 0 0 20px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    /* Buttons */
+    .confirmation-box button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .confirm-button {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .confirm-button:hover {
+      background-color: #218838;
+    }
+
+    .cancel-button {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .cancel-button:hover {
+      background-color: #c82333;
+    }
+
+    /* Show confirmation box */
+    .confirmation-overlay.show {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+  <body>
+    <div>
+      {% include 'navbar/navbar.html' %}
+      <nav class="ts-nav-container">
+        <div class="ts-nav-center">
+          <a href="/timesheet" class="ts-nav-link">Timesheet</a>
+          <a href="/timesheet/fill" class="ts-nav-link">Fill Timesheet</a>
+          <a href="/timesheet/summary" class="ts-nav-link"> View Summary</a>
+        </div>
+      </nav>
+      <div class="view-box">
+        <h1 class="ts-dateentry-title">Entries for {{ date }}</h1>
+        <table>
+          <thead class="ts-dateentry-header">
+            <tr class="ts-dateentry-header-row">
+              <th class="ts-dateentry-header-cell">Duration (Hours)</th>
+              <th class="ts-dateentry-header-cell">Duration (Minutes)</th>
+              <th class="ts-dateentry-header-cell">Total Time</th>
+              <th class="ts-dateentry-header-cell">Project Code</th>
+              <th class="ts-dateentry-header-cell">Allocation Type</th>
+              <th class="ts-dateentry-header-cell">Category 1</th>
+              <th class="ts-dateentry-header-cell">Category 2</th>
+              <th class="ts-dateentry-header-cell">Category 3</th>
+              <th class="ts-dateentry-header-cell">Comments</th>
+              <th class="ts-dateentry-header-cell">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in entries %}
+            <tr class="ts-dateentry-row">
+              <td class="ts-dateentry-cell">{{ entry.Hours}}</td>
+              <td class="ts-dateentry-cell">{{ entry.Minutes }}</td>
+              <td class="ts-dateentry-cell">
+                {{"%.2f" | format(entry.Hours + (entry.Minutes/60))}}
+              </td>
+              <td class="ts-dateentry-cell">{{ entry.ProjectCode }}</td>
+              <td class="ts-dateentry-cell">{{ entry.AllocationType }}</td>
+              <td class="ts-dateentry-cell">{{ entry.Category1}}</td>
+              <td class="ts-dateentry-cell">{{ entry.Category2}}</td>
+              <td class="ts-dateentry-cell">{{ entry.Category3}}</td>
+              <td class="ts-dateentry-cell">{{ entry.Comment }}</td>
+              <td class="ts-dateentry-cell">
+                <!-- <a
+                  class="ts-dateentry-link"
+                  href="{{ url_for('edit_entry', entry_id=entry.Uniq_ID) }}"
+                  >Edit</a
+                > -->
+                <a class="ts-dateentry-link" href="/comingsoon">Edit</a>
+                <form
+                  action="{{ url_for('delete_entry', entry_id=entry.Uniq_ID) }}"
+                  method="POST"
+                  style="display: inline"
+                  class="ts-dateentry-form"
+                >
+                  <button
+                    type="submit"
+                    onclick="handleCustomConfirm(event, 'Are you sure you want to delete this entry?');"
+                    class="ts-dateentry-button"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script>
+      // Intercept the default confirm call
+      function handleCustomConfirm(event, message) {
+        event.preventDefault(); // Prevent the default action (e.g., form submission)
+
+        // Custom confirm implementation
+        customConfirm(message).then((result) => {
+          if (result) {
+            // If confirmed, proceed with the original action
+            event.target.closest("form")?.submit() ||
+              console.log("Confirmed action executed.");
+          } else {
+            console.log("Action canceled.");
+          }
+        });
+      }
+
+      function customConfirm(message) {
+        return new Promise((resolve) => {
+          // Create the confirmation dialog if it doesn't already exist
+          let confirmationOverlay = document.getElementById(
+            "confirmationOverlay"
+          );
+          if (!confirmationOverlay) {
+            confirmationOverlay = document.createElement("div");
+            confirmationOverlay.id = "confirmationOverlay";
+            confirmationOverlay.className = "confirmation-overlay";
+            confirmationOverlay.innerHTML = `
+            <div class="confirmation-box">
+              <p id="confirmationMessage"></p>
+              <button class="confirm-button" id="confirmYes">Yes</button>
+              <button class="cancel-button" id="confirmNo">No</button>
+            </div>`;
+            document.body.appendChild(confirmationOverlay);
+          }
+
+          // Show the custom confirmation box
+          document.getElementById("confirmationMessage").textContent = message;
+          confirmationOverlay.classList.add("show");
+
+          // Handle user choice
+          document.getElementById("confirmYes").onclick = () => {
+            confirmationOverlay.classList.remove("show");
+            resolve(true); // Resolve as confirmed
+          };
+
+          document.getElementById("confirmNo").onclick = () => {
+            confirmationOverlay.classList.remove("show");
+            resolve(false); // Resolve as canceled
+          };
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+/* General page background */
+.login-body {
+  background-image: url("../../images/rsa-bg.png");
+  background-size: contain;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Container for centering form */
+.login-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Title styling */
+.login-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+/* Label styling */
+.login-label {
+  display: block;
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
+/* Input field styling */
+.login-input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Button styling */
+.login-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-button:hover {
+  background-color: #45a049;
+}
+
+.passwordWarnings {
+  color: red;
+  margin: 1px;
+}
+
+.login-pass-switch {
+  padding: 10px;
+}
+
+.login-pass-switch a {
+  text-decoration: none;
+  color: black;
+  font-size: 15px;
+}
+
+.login-pass-switch a:hover {
+  text-decoration: underline;
+  color: red;
+  font-size: 16px;
+}

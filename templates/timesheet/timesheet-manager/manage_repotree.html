@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Repotree</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/timesheet/ManageRepotree/ManageRepotree.CSS') }}"
+    />
+  </head>
+  <body>
+    {% include 'navbar/navbar.html' %}
+    <nav class="ts-nav-container">
+      <div class="ts-nav-center">
+        <a onclick="history.back(-1)" class="ts-nav-link">Go Back</a>
+        <a href="/timesheet" class="ts-nav-link">Timesheet</a>
+        <form
+          method="POST"
+          action="{{ url_for('manage_repotree') }}"
+          class="ts-manager-view-form"
+        >
+          <input
+            type="text"
+            name="search"
+            placeholder="Search employees"
+            value="{{ search_term }}"
+            class="ts-manager-view-input"
+          />
+          <button type="submit" class="ts-manager-view-button">Search</button>
+        </form>
+      </div>
+    </nav>
+    <div class="ts-manager-view-body">
+      <div class="ts-manager-view-container">
+        <h2 class="ts-manager-view-subtitle">Employees Reporting to You</h2>
+        <ul class="ts-manager-view-list">
+          {% for employee in employees %}
+          <li class="ts-manager-view-list-item">
+            {{ employee.EName }} (ID: {{ employee.EMPID }})
+            <a
+              href="{{ url_for('employee_entries', emp_id=employee.EMPID) }}"
+              class="ts-manager-view-link"
+            >
+              View Entries
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+
+        {% if not employees %}
+        <p class="ts-manager-view-no-employees">No employees found.</p>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

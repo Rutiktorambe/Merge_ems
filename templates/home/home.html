@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home/home.css') }}"
+    />
+  </head>
+  <body>
+    <div>{% include 'navbar/navbar.html' %}</div>
+    <div class="home-box">
+      <div class="home-banner">
+        <h2>Welcome, <span>{{ user.EName }}</span></h2>
+        <p>
+          Role:
+          <span>
+            {{ user.RSALevel }}
+            <span style="color: black; font-size: larger">|</span></span
+          >
+          Team:
+          <span
+            >{{ user.Team }}
+            <span style="color: black; font-size: larger">|</span></span
+          >
+          Manager:
+          <span>
+            {{ user.LineManager }}
+            <span style="color: black; font-size: larger">|</span></span
+          >
+          Employee id:
+          <span>{{ user.EMPID }}</span>
+        </p>
+      </div>
+
+      <div class="home-services">
+        <h3>Available Services</h3>
+        <ul>
+          <a href="{{ url_for('timesheet.timesheethome') }}"
+            ><li>Timesheet</li></a
+          >
+          <a href="/leavesystem"><li>Leave Management</li></a>
+          <a href="/comingsoon"><li>IT Helpdesk</li></a>
+          <a href="/comingsoon"><li>Finance Reports</li></a>
+          <a href="/comingsoon"><li>HR Portal</li></a>
+          <a href="/comingsoon"><li>Project Management</li></a>
+          <a href="/comingsoon"><li>Performance Reviews</li></a>
+          <a href="/comingsoon"><li>Training Portal</li></a>
+          <a href="/comingsoon"><li>Customer Support</li></a>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

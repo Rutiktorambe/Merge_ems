@@ -1,0 +1,65 @@
+.ts-manager-view-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+.ts-manager-view-container {
+  text-align: center;
+}
+.ts-manager-view-title {
+  font-size: 2em;
+  margin-bottom: 1em;
+}
+.ts-manager-view-input {
+  padding: 0.5em;
+  font-size: 1em;
+}
+.ts-manager-view-button {
+  padding: 0.5em 1em;
+  font-size: 1em;
+}
+.ts-manager-view-subtitle {
+  font-size: 1.5em;
+  margin-bottom: 1em;
+}
+.ts-manager-view-list {
+  list-style: none;
+  padding: 0;
+}
+.ts-manager-view-list-item {
+  margin-bottom: 0.5em;
+}
+.ts-manager-view-link {
+  margin-left: 1em;
+  color: blue;
+  text-decoration: underline;
+}
+.ts-manager-view-no-employees {
+  font-size: 1em;
+  color: gray;
+}
+
+.ts-nav-container {
+  margin-top: 64px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+}
+
+.ts-nav-center {
+  display: flex;
+}
+
+.ts-nav-link {
+  margin: 0 25px;
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px 15px;
+  border-radius: 5px;
+}

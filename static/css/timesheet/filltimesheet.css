@@ -1,0 +1,143 @@
+.ts-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.ts-nav-container {
+  margin-top: 64px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+}
+
+.ts-nav-center {
+  display: flex;
+}
+
+.ts-nav-link {
+  margin: 0 25px;
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+.ts-form-body {
+  margin: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1000px;
+}
+
+.ts-form-row {
+  font-size: 20px;
+  display: flex;
+  padding: 10px;
+  justify-content: left;
+}
+.ts-form-row label {
+  padding: 5px;
+  margin-right: 5px;
+}
+
+.ts-form-row input {
+  width: 120px;
+  font-size: 15px;
+  margin-right: 15px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 1px 1px 1px black;
+}
+.ts-form-row select {
+  width: 120px;
+  font-size: 15px;
+  margin-right: 15px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 1px 1px 1px black;
+}
+.ts-row-5 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ts-row-5 textarea {
+  width: 400px;
+  height: 100px;
+  font-size: 15px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px black;
+  resize: none;
+  padding: 10px;
+}
+
+button[type="submit"] {
+  background-color: #3498db;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin: 30px auto 0;
+  font-size: 16px;
+}
+
+button[type="submit"]:hover {
+  background-color: #2d536c;
+}
+
+/* Styling for the summary table container */
+.ts-summary-table {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.ts-summary-table h3 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.ts-summary-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ts-summary-table table th,
+.ts-summary-table table td {
+  padding: 10px;
+  text-align: center;
+  font-size: 1em;
+}
+
+.ts-summary-table table th {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border: 1px solid #007bff;
+}
+
+.ts-summary-table table td {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+}
+
+.ts-summary-table table tr:nth-child(even) td {
+  background-color: #f2f2f2;
+}

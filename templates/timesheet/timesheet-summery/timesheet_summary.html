@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weekly Summary</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/timesheet/view_summary.css') }}"
+    />
+  </head>
+  <body>
+    {% include 'navbar/navbar.html' %}
+    <nav class="ts-nav-container">
+      <div class="ts-nav-center">
+        <a href="/timesheet" class="ts-nav-link">Timesheet</a>
+        <a href="/timesheet/fill" class="ts-nav-link">Fill Timesheet</a>
+      </div>
+    </nav>
+    <div class="summary-box">
+      <div class="ts-summary-container">
+        <h1 class="ts-summary-title">Weekly Summary</h1>
+        <form
+          action="{{ url_for('timesheet_summary') }}"
+          method="get"
+          class="ts-summary-form"
+        >
+          <input
+            type="date"
+            id="selected_date"
+            name="selected_date"
+            value="{{ selected_date }}"
+            required
+            class="ts-summary-date-input"
+          />
+          <button type="submit" class="ts-summary-button">Show Week</button>
+        </form>
+        <div class="ts-summary-navigation">
+          <a
+            href="{{ url_for('timesheet_summary', selected_date=prev_week_date) }}"
+            class="ts-summary-link"
+            >Previous Week</a
+          >
+          <span>{{ week_start }} - {{ week_end }}</span>
+          <a
+            href="{{ url_for('timesheet_summary', selected_date=next_week_date) }}"
+            class="ts-summary-link"
+            >Next Week</a
+          >
+        </div>
+        <table class="ts-summary-table">
+          <thead>
+            <tr>
+              <th class="ts-summary-header">Date</th>
+              <th class="ts-summary-header">Day</th>
+              <th class="ts-summary-header">Billable</th>
+              <th class="ts-summary-header">Admin</th>
+              <th class="ts-summary-header">Training</th>
+              <th class="ts-summary-header">Unavailable Time</th>
+              <th class="ts-summary-header">Total Time</th>
+              <th class="ts-summary-header">View Entries</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for day in weekly_summary %}
+            <tr>
+              <td class="ts-summary-data">{{ day.date.strftime('%A') }}</td>
+              <td class="ts-summary-data">{{ day.date }}</td>
+              <td class="ts-summary-data">{{ day.billable_time }}</td>
+              <td class="ts-summary-data">{{ day.nonbillable_admin_time }}</td>
+              <td class="ts-summary-data">
+                {{ day.nonbillable_training_time }}
+              </td>
+              <td class="ts-summary-data">{{ day.unavailable_time }}</td>
+              <td class="ts-summary-data">{{ day.total_time }}</td>
+              <td class="ts-summary-data">
+                <a href="{{ url_for('view_entries', date=day.date) }}"
+                  >View Entries</a
+                >
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2" class="ts-summary-total">Total</td>
+              <td class="ts-summary-total ts-summary-data">
+                {{ total_billable }}
+              </td>
+              <td class="ts-summary-total ts-summary-data">
+                {{ total_admin }}
+              </td>
+              <td class="ts-summary-total ts-summary-data">
+                {{ total_training }}
+              </td>
+              <td class="ts-summary-total ts-summary-data">
+                {{ total_unavailable }}
+              </td>
+              <td class="ts-summary-total ts-summary-data">{{ total_time }}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="ts-summary-percentage">Percentage</td>
+              <td class="ts-summary-percentage ts-summary-data">
+                {{ percentages.billable }}%
+              </td>
+              <td class="ts-summary-percentage ts-summary-data">
+                {{ percentages.admin }}%
+              </td>
+              <td class="ts-summary-percentage ts-summary-data">
+                {{ percentages.training }}%
+              </td>
+              <td class="ts-summary-percentage ts-summary-data">
+                {{ percentages.unavailable }}%
+              </td>
+              <td class="ts-summary-percentage ts-summary-data">100%</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

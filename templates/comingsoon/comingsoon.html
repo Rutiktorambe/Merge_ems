@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/comingsoon/comingsoon.css') }}"
+    />
+  </head>
+  <body>
+    {% include 'navbar/navbar.html' %}
+    <div class="wrapper">
+      <h1>coming soon<span class="dot">.</span></h1>
+      <p>We are Working on this Page .</p>
+      <div class="icons">
+        <a href="/home">Home</a>
+      </div>
+    </div>
+  </body>
+</html>

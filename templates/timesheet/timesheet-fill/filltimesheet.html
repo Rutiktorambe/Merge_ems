@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fill Timesheet</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/timesheet/filltimesheet.css') }}"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="{{ url_for('static', filename='js/timesheet/timesheetfill.js') }}"></script>
+    <script>
+      function fetchSummary(dates) {
+        fetch("/timesheet/history", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ dates: dates }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const tableBody = document
+              .getElementById("timesheetSummaryTable")
+              .querySelector("tbody");
+            tableBody.innerHTML = "";
+
+            for (const [date, totalTime] of Object.entries(data)) {
+              const row = document.createElement("tr");
+              row.innerHTML = `<td>${date}</td><td>${totalTime} hours</td>`;
+              tableBody.appendChild(row);
+            }
+          })
+          .catch((error) => console.error("Error fetching summary:", error));
+      }
+    </script>
+  </head>
+  <body>
+    <div>{% include 'navbar/navbar.html' %}</div>
+    <nav class="ts-nav-container">
+      <div class="ts-nav-center">
+        <a href="/timesheet" class="ts-nav-link">Timesheet</a>
+        <a href="/timesheet/summary" class="ts-nav-link">View Summary</a>
+      </div>
+    </nav>
+    <div style="display: flex">
+      <div class="ts-summary-table">
+        <h3>Timesheet Summary</h3>
+        <table id="timesheetSummaryTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Total Time</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="ts-body">
+        <div class="ts-form-body">
+          <h2>Fill Timesheet</h2>
+          <form
+            id="timesheetForm"
+            onsubmit="return validateForm(event);"
+            class="ts-form"
+            name="timesheetForm"
+            method="POST"
+            action="{{ url_for('submit_timesheet') }}"
+          >
+            <div class="ts-form-row ts-row-1">
+              <label>EName: </label>
+              <input
+                type="text"
+                name="EName"
+                value="{{ user.EName }}"
+                readonly
+              />
+              <label>LineManager: </label>
+              <input
+                type="text"
+                name="LineManager"
+                value="{{ user.LineManager }}"
+                readonly
+              />
+              <label>EmpID: </label>
+              <input
+                type="text"
+                name="EmpID"
+                value="{{ user.EMPID }}"
+                readonly
+              />
+              <label>Team: </label>
+              <input type="text" name="Team" value="{{ user.Team }}" readonly />
+            </div>
+
+            <div class="ts-form-row ts-row-2">
+              <label>Date of Entry: </label>
+              <input
+                type="text"
+                id="dateofentry"
+                name="DateofEntry"
+                multiple
+                placeholder="Select Date"
+                required
+              />
+            </div>
+
+            <div id="dateDurations"></div>
+
+            <div class="ts-form-row ts-row-3">
+              <label>Project Code: </label>
+              <input type="text" id="projectCode" name="ProjectCode" readonly />
+
+              <label>Allocation Type: </label>
+              <select
+                id="allocationType"
+                name="AllocationType"
+                onchange="updateCategories()"
+              >
+                <option value=" required">Select</option>
+                <option value="billable">Billable</option>
+                <option value="non-billable">Non-Billable</option>
+              </select>
+            </div>
+
+            <div class="ts-form-row ts-row-4">
+              <label>Category 1: </label>
+              <select id="category1" name="Category1" required></select>
+              <label>Category 2: </label>
+              <select id="category2" name="Category2" required></select>
+              <label>Category 3: </label>
+              <select id="category3" name="Category3"></select>
+            </div>
+
+            <div class="ts-form-row ts-row-5">
+              <label>Comments: </label>
+              <textarea
+                name="comments"
+                class="ts-form-comments"
+                placeholder="Write the comments up to 200 chars here..."
+                maxlength="200"
+              ></textarea>
+            </div>
+
+            <button type="submit">Submit Timesheet</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      flatpickr("#dateofentry", {
+        mode: "multiple",
+        dateFormat: "Y-m-d",
+        maxDate: "today",
+        allowInput: true,
+        altInput: true,
+        onChange: function (selectedDates, dateStr, instance) {
+          const dates = selectedDates.map((date) =>
+            instance.formatDate(date, "Y-m-d")
+          );
+          fetchSummary(dates);
+
+          const dateDurations = document.getElementById("dateDurations");
+          dateDurations.innerHTML = "";
+
+          selectedDates.forEach((date) => {
+            const dateFormatted = instance.formatDate(date, "Y-m-d");
+
+            const row = document.createElement("div");
+            row.classList.add("ts-form-row", "ts-row-2");
+
+            row.innerHTML = `        
+          <label>${dateFormatted} - Hours: </label>
+          <select name="hours_${dateFormatted}">
+            ${[...Array(24).keys()]
+              .map((hour) => `<option value="${hour}">${hour}</option>`)
+              .join("")}
+          </select>
+          <label>Minutes: </label>
+          <select name="minutes_${dateFormatted}">
+            ${[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
+              .map((minute) => `<option value="${minute}">${minute}</option>`)
+              .join("")}
+          </select>
+        `;
+
+            dateDurations.appendChild(row);
+          });
+        },
+      });
+    </script>
+  </body>
+</html>

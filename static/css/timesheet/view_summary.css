@@ -1,0 +1,142 @@
+.summary-box {
+  margin-top: 5px;
+}
+
+.ts-summary-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0px 20px 00px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.ts-summary-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.ts-summary-form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.ts-summary-date-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.ts-summary-button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ts-summary-navigation {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ts-summary-link {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.ts-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.ts-summary-header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  width: 14.28%;
+  border: 1px solid white;
+}
+
+.ts-summary-data {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  border-left: 1px solid #ddd;
+}
+
+.ts-summary-data:first-child {
+  border-left: none;
+}
+
+.ts-summary-no-data {
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
+}
+.ts-summary-navigation a {
+  display: inline-block;
+  padding: 8px 15px;
+  margin: 0 10px;
+  text-decoration: none;
+  color: white;
+  background-color: #007bff;
+  border-radius: 4px;
+}
+
+.ts-nav-container {
+  margin-top: 64px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+}
+
+.ts-nav-center {
+  display: flex;
+}
+
+.ts-nav-link {
+  margin: 0 25px;
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+/* New Styles for Totals and Percentages */
+.ts-summary-table tfoot {
+  background-color: #f1f1f1; /* Light background for totals/percentages */
+}
+
+.ts-summary-total-label,
+.ts-summary-percentage-label {
+  text-align: left;
+  padding: 10px;
+  font-weight: bold;
+  color: #333; /* Darker color for contrast */
+  border-top: 2px solid #ddd; /* Distinguish totals row */
+}
+
+.ts-summary-total,
+.ts-summary-percentage {
+  padding: 8px;
+  text-align: center;
+  font-weight: bold;
+  color: #007bff;
+  border-top: 2px solid #ddd; /* Distinguish totals row */
+}
+
+.ts-summary-total:hover,
+.ts-summary-percentage:hover {
+  background-color: #e6f0ff; /* Hover effect for better visibility */
+}

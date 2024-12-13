@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit Timesheet Entry</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/timesheet/edittimesheet.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      async function updateCategories() {
+        const allocationType = document.getElementById("allocationType").value;
+        const category1 = document.getElementById("category1");
+        const category2 = document.getElementById("category2");
+        const category3 = document.getElementById("category3");
+        const projectCode = document.getElementById("projectCode");
+
+        // Reset dependent fields
+        category2.innerHTML = "<option value=''>Select Project</option>";
+        category3.innerHTML = "<option value=''>Select</option>";
+        projectCode.value = ""; // Reset the project code value
+
+        if (allocationType === "billable") {
+          // Billable categories
+          const billableOptions = [
+            "Pricing",
+            "Capital",
+            "Analytics",
+            "Reserving",
+            "CIO-UK",
+            "HR",
+          ];
+          billableOptions.forEach((option) =>
+            category1.options.add(new Option(option, option))
+          );
+
+          // Set Category1 value (default)
+          category1.value = "{{ entry.Category1 }}";
+
+          category1.onchange = async function () {
+            const selectedCategory = category1.value;
+            const response = await fetch(`/get_projects/${selectedCategory}`);
+            const projects = await response.json();
+
+            category2.innerHTML = "<option value=''>Select Project</option>";
+            projects.forEach((project) => {
+              const option = new Option(project.ProjectName, project.ProjectCode);
+              category2.options.add(option);
+            });
+
+            category2.value = "{{ entry.Category2 }}"; // Pre-select the correct project
+
+            category2.onchange = function () {
+              const selectedOption = category2.options[category2.selectedIndex];
+              projectCode.value = selectedOption.value; // Set project code based on selected project
+
+              category3.innerHTML = "<option value=''>Select</option>"; // Reset category3
+              const thirdCategoryOptions = [
+                "Planning",
+                "Project Training",
+                "Data Analysis",
+                "Meeting",
+                "Peer Review",
+                "Report & Documentation",
+              ];
+              thirdCategoryOptions.forEach((option) =>
+                category3.options.add(new Option(option, option))
+              );
+
+              category3.value = "{{ entry.Category3 }}"; // Pre-select category 3 if applicable
+            };
+          };
+        } else if (allocationType === "non-billable") {
+          // Non-billable categories
+          const nonBillableOptions = {
+            Admin: [
+              { name: "Performance & Review & 1-2-1", code: "A100" },
+              { name: "IT issue", code: "A200" },
+              { name: "Team Meeting", code: "A300" },
+              { name: "Marketing", code: "A400" },
+              { name: "Recruitment & People", code: "A500" },
+              { name: "Social Events", code: "A600" },
+              { name: "Finance", code: "A700" },
+              { name: "Other", code: "A800" },
+            ],
+            Training: [
+              { name: "Internal", code: "T100" },
+              { name: "External", code: "T200" },
+              { name: "Self", code: "T300" },
+              { name: "Other", code: "T600" },
+            ],
+          };
+
+          Object.keys(nonBillableOptions).forEach((option) =>
+            category1.options.add(new Option(option, option))
+          );
+
+          category1.value = "{{ entry.Category1 }}"; // Pre-select category 1
+
+          category1.onchange = function () {
+            const selectedCategory = category1.value;
+            category2.innerHTML = "<option value=''>Select Project</option>";
+            category3.innerHTML = "<option value=''>Select</option>";
+            projectCode.value = ""; // Reset the project code
+
+            if (nonBillableOptions[selectedCategory]) {
+              nonBillableOptions[selectedCategory].forEach((option) => {
+                const opt = new Option(option.name, option.code);
+                category2.options.add(opt);
+              });
+
+              category2.value = "{{ entry.Category2 }}"; // Pre-select category 2
+
+              category2.onchange = function () {
+                const selectedOption = category2.options[category2.selectedIndex];
+                projectCode.value = selectedOption.value; // Set project code based on category 2 selection
+
+                category3.innerHTML = "<option value=''>Select</option>";
+                if (selectedCategory === "Admin" && projectCode.value === "A800") {
+                  [
+                    "Other",
+                    "Vision_2016",
+                    "EMS",
+                    "YouRSAY",
+                    "Project_Planning_Document",
+                    "Vision_Data_Project",
+                    "Group_Internal_Audit",
+                    "Transfer_Pricing",
+                    "Project_butterfly",
+                    "Revenue_Management",
+                    "KPI_Research_Project",
+                    "ME_Pricing_Training",
+                    "Big_Upgrade",
+                    "Y2016_Graduate_Training_Mandatory",
+                  ].forEach((sub) => {
+                    category3.options.add(new Option(sub, sub));
+                  });
+                  category3.value = "{{ entry.Category3 }}"; // Pre-select category 3
+                }
+              };
+            }
+          };
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        flatpickr("#dateofentry", {
+          dateFormat: "Y-m-d",
+          defaultDate: "{{ entry.DateofEntry }}",
+        });
+        updateCategories();
+      });
+    </script>
+  </head>
+  <body>
+    <div>{% include 'navbar/navbar.html' %}</div>
+    <nav class="ts-nav-container">
+      <div class="ts-nav-center">
+        <a href="/timesheet" class="ts-nav-link">Timesheet</a>
+        <a href="/timesheet/fill" class="ts-nav-link">Fill Timesheet</a>
+        <a href="/timesheet/summary" class="ts-nav-link">View Summary</a>
+      </div>
+    </nav>
+
+    <div class="edit-ts-container">
+      <h2>Edit Timesheet Entry</h2>
+      <form name="editTimesheetForm" method="POST" class="edit-ts-form" onsubmit="return validateForm()">
+        <div class="edit-ts-row">
+          <label>EName: </label>
+          <input type="text" name="EName" value="{{ entry.EName }}" readonly />
+          <label>LineManager: </label>
+          <input type="text" name="LineManager" value="{{ entry.LineManager }}" readonly />
+          <label>EmpID: </label>
+          <input type="text" name="EmpID" value="{{ entry.EmpID }}" readonly />
+          <label>Team: </label>
+          <input type="text" name="Team" value="{{ entry.Team }}" readonly />
+        </div>
+
+        <div class="edit-ts-row">
+          <label>Project Code: </label>
+          <select id="projectCode" name="ProjectCode">
+            <option value="{{ entry.ProjectCode }}" selected>{{ entry.ProjectCode }}</option>
+          </select>
+
+          <label>Allocation Type: </label>
+          <select id="allocationType" name="AllocationType" onchange="updateCategories()">
+            <option value="billable" {% if entry.AllocationType == 'billable' %}selected{% endif %}>Billable</option>
+            <option value="non-billable" {% if entry.AllocationType == 'non-billable' %}selected{% endif %}>Non-Billable</option>
+          </select>
+        </div>
+
+        <div class="edit-ts-row">
+          <label>Date of Entry: </label>
+          <input type="text" id="dateofentry" name="DateofEntry" value="{{ entry.DateofEntry }}" />
+
+          <label>Hours: </label>
+          <select name="hours">
+            {% for hour in range(1, 9) %}
+              <option value="{{ hour }}" {% if entry.Hours == hour %}selected{% endif %}>{{ hour }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="edit-ts-row">
+          <label>Category 1: </label>
+          <select id="category1" name="Category1">
+            <option value="{{ entry.Category1 }}" selected>{{ entry.Category1 }}</option>
+          </select>
+
+          <label>Category 2: </label>
+          <select id="category2" name="Category2">
+            <option value="{{ entry.Category2 }}" selected>{{ entry.Category2 }}</option>
+          </select>
+
+          <label>Category 3: </label>
+          <select id="category3" name="Category3">
+            <option value="{{ entry.Category3 }}" selected>{{ entry.Category3 }}</option>
+          </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Update Entry</button>
+      </form>
+    </div>
+  </body>
+</html>
