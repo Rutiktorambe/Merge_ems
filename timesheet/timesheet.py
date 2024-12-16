@@ -90,4 +90,18 @@ def delete_entry(entry_id):
         db.session.commit()
     else:
         None
-    return redirect(url_for('view_entries', date=entry.DateofEntry))
+    return redirect(url_for('timesheet.view_entries', date=entry.DateofEntry))
+
+
+
+@timesheet_bp.route('/view_entries/<date>')
+@login_required
+def view_entries(date):
+    try:
+        date = datetime.strptime(date, '%Y-%m-%d').date()
+        entries = TimesheetEntry.query.filter_by(EmpID=current_user.get_id(), DateofEntry=date).all()
+        return render_template('timesheet/timesheet-summery/view_entries.html', entries=entries, date=date, user=current_user)
+    except Exception as e:
+            session['error_type'] = "Internal Server Error"
+            session['error_message'] = f"Unable get data for the {date}"
+            return redirect(url_for('error_page'))

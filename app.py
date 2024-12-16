@@ -323,19 +323,7 @@ def timesheet_summary():
 
 
 # ------------------------------------------------------------------------ViewEntries-----------------------------------------------------------
-
-@app.route('/timesheet/view_entries/<date>')
-@login_required
-def view_entries(date):
-    try:
-        date = datetime.strptime(date, '%Y-%m-%d').date()
-        entries = TimesheetEntry.query.filter_by(EmpID=current_user.get_id(), DateofEntry=date).all()
-        return render_template('timesheet/timesheet-summery/view_entries.html', entries=entries, date=date, user=current_user)
-    except Exception as e:
-            session['error_type'] = "Internal Server Error"
-            session['error_message'] = f"Unable get data for the {date}"
-            return redirect(url_for('error_page'))
-        
+      
 
 @app.route('/timesheet/edit_entry/<entry_id>', methods=['GET', 'POST'])
 @login_required
@@ -368,7 +356,7 @@ def edit_entry(entry_id):
                     entry.unavailable_time = entry.total_time
 
             db.session.commit()
-            return redirect(url_for('view_entries', date=entry.DateofEntry))
+            return redirect(url_for('timesheet.view_entries', date=entry.DateofEntry))
         
         except Exception as e:
             db.session.rollback()
@@ -377,23 +365,6 @@ def edit_entry(entry_id):
             session['error_code'] = 500
             return redirect(url_for('error_page'))
     return render_template('timesheet/timesheet-summery/edit_entry.html', entry=entry, user=current_user)
-
-# ------------------------------------------------------------DeleteEntry---------------------------------------------------------------
-
-# @app.route('/timesheet/delete_entry/<entry_id>', methods=['POST'])
-# @login_required
-# def delete_entry(entry_id):
-#     entry = TimesheetEntry.query.filter_by(Uniq_ID=entry_id).first()
-#     if entry:
-#         db.session.delete(entry)
-#         db.session.commit()
-#     else:
-#         None
-#     return redirect(url_for('view_entries', date=entry.DateofEntry))
-
-
-# --------------------------------------------------------Success--------------------------------------------------------------------------
-
 
 
 # -----------------------------------------------------------------Manage_Repotree----------------------------------------------------------
