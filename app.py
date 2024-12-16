@@ -1,16 +1,12 @@
-from flask import Flask, render_template, redirect, url_for, flash, request , session ,send_from_directory,abort ,jsonify
+from flask import Flask, render_template, redirect, url_for, flash, request , session ,send_from_directory
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-# from flask_sqlalchemy import SQLAlchemy
-# from sqlalchemy.exc import SQLAlchemyError
-from models import db, EMPWD , TimesheetEntry ,Resourceinfo,TrainingRegistration,Training
-from datetime import timedelta , date ,datetime ,timezone
-import uuid ,os ,traceback
-from routes  import timesheet_bp
-from routes  import error_bp  # Import the error blueprint
+from models import db, EMPWD
+from datetime import timedelta
+import os 
+from routes  import timesheet_bp ,error_bp  
 
 
 app = Flask(__name__)
-# db.init_app(app)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///Z:/0.0 EMS/New folder_Ma/RT/database.db' 
 app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///database.db'     #local-foder DB
@@ -34,10 +30,8 @@ def load_user(user_id):
 
 # ----------------------------------------------------------------Auth_Routes---------------------------------------------------
 
-
-# Register the timesheet blueprint
 app.register_blueprint(timesheet_bp)
-app.register_blueprint(error_bp)  # Register the error blueprint
+app.register_blueprint(error_bp)  
 print(app.url_map)
 
 
@@ -140,7 +134,3 @@ def leavesystem():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=5000, debug=True)
-
-
-# from app import db
-# db.create_all()
