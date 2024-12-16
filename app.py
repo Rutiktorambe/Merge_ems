@@ -5,8 +5,8 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from models import db, EMPWD , TimesheetEntry ,Resourceinfo,TrainingRegistration,Training
 from datetime import timedelta , date ,datetime ,timezone
 import uuid ,os ,traceback
-from timesheet import timesheet_bp
-from error import error_bp  # Import the error blueprint
+from routes  import timesheet_bp
+from routes  import error_bp  # Import the error blueprint
 
 
 app = Flask(__name__)
