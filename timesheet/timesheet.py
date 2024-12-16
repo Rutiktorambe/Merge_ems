@@ -295,11 +295,6 @@ def employee_entries(emp_id):
     )
 
 
-
-
-
-
-
 @timesheet_bp.route('/edit_entry/<entry_id>', methods=['GET', 'POST'])
 @login_required
 def edit_entry(entry_id):
@@ -340,3 +335,56 @@ def edit_entry(entry_id):
             session['error_code'] = 500
             return redirect(url_for('error_page'))
     return render_template('timesheet/timesheet-summery/edit_entry.html', entry=entry, user=current_user)
+
+
+@timesheet_bp.route('/get_projects/<category>', methods=['GET'])
+@login_required
+def get_projects(category):
+    projects = Resourceinfo.query.filter_by(Team=category,EmpID=current_user.EMPID).all()
+    project_data = [{"ProjectName": project.ProjectName, "ProjectCode": project.ProjectCode} for project in projects]
+    return jsonify(project_data)
+
+# ______________________________________________________________________
+
+@timesheet_bp.route('/get_datetime/<date>', methods=['GET'])
+@login_required
+def get_datetime(date):
+    # if request.headers.get("X-Requested-With") != "XMLHttpRequest":
+    #     abort(403)  # Forbidden
+    date_obj = datetime.strptime(date, "%Y-%m-%d").date()
+    entries = TimesheetEntry.query.filter_by(DateofEntry=date_obj, EmpID=current_user.EMPID).all()
+    total_time = sum(entry.Hours + (entry.Minutes / 60) for entry in entries)
+    return jsonify({"total_time": round(total_time, 2)}) 
+
+# ______________________________________________________________________
+
+@timesheet_bp.route('/projectCode/<projectCode>', methods=['GET'])
+@login_required
+def get_projects_dates(projectCode):
+    projects=Resourceinfo.query.filter_by(ProjectCode=projectCode,EmpID=current_user.EMPID).all()
+    project_data = [{"ProjectName": project.ProjectName, "ProjectCode": project.ProjectCode,"FromDate": project.FromDate, "ToDate": project.ToDate} for project in projects]
+    return jsonify(project_data)
+
+# ______________________________________________________________________
+
+@timesheet_bp.route('/get_trainings/<training>', methods=['GET'])
+@login_required
+def get_trainings(training):
+    if training.lower() == "internal":
+        trainings = TrainingRegistration.query.join(Training, TrainingRegistration.TID == Training.TID) \
+            .filter(Training.TType == "Internal",TrainingRegistration.EmpID == current_user.EMPID).all()
+    elif training.lower() == "external":
+        trainings = TrainingRegistration.query.join(Training, TrainingRegistration.TID == Training.TID) \
+            .filter(Training.TType == "External", TrainingRegistration.EmpID == current_user.EMPID).all()
+    else:
+        trainings = []
+    if trainings:
+        trainings_data = [
+            {"TID": training.TID, "TName": Training.query.filter_by(TID=training.TID).first().TName} 
+            for training in trainings
+        ]
+    else:
+        trainings_data = []
+    return jsonify(trainings_data)
+
+

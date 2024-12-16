@@ -38,7 +38,7 @@
 
           category1.onchange = async function () {
             const selectedCategory = category1.value;
-            const response = await fetch(`/get_projects/${selectedCategory}`);
+            const response = await fetch(`/timesheet/get_projects/${selectedCategory}`);
             const projects = await response.json();
 
             category2.innerHTML = "<option value=''>Select Project</option>";

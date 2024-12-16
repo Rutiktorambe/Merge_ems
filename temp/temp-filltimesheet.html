@@ -52,7 +52,7 @@
           '<option value="">Select Category 3</option>';
 
         if (allocationType === "billable") {
-          fetch(`/get_projects?category1=${category1Value}`)
+          fetch(`/timesheet/get_projects?category1=${category1Value}`)
             .then((response) => {
               if (!response.ok) {
                 throw new Error("Failed to fetch projects");

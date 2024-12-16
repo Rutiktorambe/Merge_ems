@@ -31,7 +31,9 @@ async function updateCategories() {
 
     category1.onchange = async function () {
       const selectedCategory = category1.value;
-      const response = await fetch(`/get_projects/${selectedCategory}`);
+      const response = await fetch(
+        `/timesheet/get_projects/${selectedCategory}`
+      );
       const projects = await response.json();
 
       category2.innerHTML = "<option value=''>Select Project</option>";
@@ -120,7 +122,9 @@ async function updateCategories() {
             const Valueinput = selectedOption.value;
             const trainingInput = Valueinput.toLowerCase();
 
-            const response = await fetch(`/get_trainings/${trainingInput}`);
+            const response = await fetch(
+              `/timesheet/get_trainings/${trainingInput}`
+            );
             const trainings = await response.json();
 
             if (trainings.length > 0) {
@@ -260,7 +264,7 @@ async function validateForm(event) {
 
   if (allocationType === "billable") {
     try {
-      const response = await fetch(`/projectCode/${projectCode}`);
+      const response = await fetch(`/timesheet/projectCode/${projectCode}`);
 
       const projects = await response.json();
 
@@ -313,8 +317,8 @@ async function validateForm(event) {
     let previoustime = 0;
     try {
       const formattedDate = date.toISOString().split("T")[0];
-      const response = await fetch(`/get_datetime/${formattedDate}`);
-      // const response = await fetch(`/get_datetime/${formattedDate}`, {
+      const response = await fetch(`/timesheet/get_datetime/${formattedDate}`);
+      // const response = await fetch(`/timesheet/get_datetime/${formattedDate}`, {
       //   headers: {
       //     "X-Requested-With": "XMLHttpRequest",
       //   },
