@@ -79,3 +79,15 @@ def submit_timesheet():
 @login_required
 def success():
     return render_template('success/success.html', user=current_user)
+
+
+@timesheet_bp.route('/delete_entry/<entry_id>', methods=['POST'])
+@login_required
+def delete_entry(entry_id):
+    entry = TimesheetEntry.query.filter_by(Uniq_ID=entry_id).first()
+    if entry:
+        db.session.delete(entry)
+        db.session.commit()
+    else:
+        None
+    return redirect(url_for('view_entries', date=entry.DateofEntry))

@@ -126,7 +126,7 @@
                 > -->
                 <a class="ts-dateentry-link" href="/comingsoon">Edit</a>
                 <form
-                  action="{{ url_for('delete_entry', entry_id=entry.Uniq_ID) }}"
+                  action="{{ url_for('timesheet.delete_entry', entry_id=entry.Uniq_ID) }}"
                   method="POST"
                   style="display: inline"
                   class="ts-dateentry-form"
