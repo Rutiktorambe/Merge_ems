@@ -6,6 +6,7 @@ from models import db, EMPWD , TimesheetEntry ,Resourceinfo,TrainingRegistration
 from datetime import timedelta , date ,datetime ,timezone
 import uuid ,os ,traceback
 from timesheet import timesheet_bp
+from error import error_bp  # Import the error blueprint
 
 
 app = Flask(__name__)
@@ -36,6 +37,7 @@ def load_user(user_id):
 
 # Register the timesheet blueprint
 app.register_blueprint(timesheet_bp)
+app.register_blueprint(error_bp)  # Register the error blueprint
 print(app.url_map)
 
 
@@ -61,7 +63,7 @@ def login():
             session['error_type'] = "Internal Server Error"
             session['error_message'] = "Something Went Wrong"
             session['error_code'] = 500
-            return redirect(url_for('error_page'))
+            return redirect(url_for('error.error_page'))
         
 
     return render_template('login/login.html',message=message)
@@ -102,7 +104,7 @@ def change_password():
             session['error_type'] = "Internal Server Error"
             session['error_message'] = "Unable to Update Password at this  Moment, Please Try After Some Time."
             session['error_code'] = 500
-            return redirect(url_for('error_page'))
+            return redirect(url_for('error.error_page'))
 
     return render_template('login/changepassword.html',message=message)
 
@@ -134,39 +136,6 @@ def comingsoon():
 @login_required
 def leavesystem():
     return render_template('leavesystem/leavesystem.html', user=current_user)
-
-# ---------------------------------------------------------Error_Handling---------------------------------------------------
-@app.route('/error')
-def error_page():
-    error_type = session.get('error_type', 'Unknown Error')
-    error_message = session.get('error_message', 'No additional information provided.')
-    error_code = session.get('error_code', 500)
-    return render_template('error/error.html', error_type=error_type, error_message=error_message, error_code=error_code, user=current_user)
-
-@app.errorhandler(404)
-def not_found_error(error):
-    print("404 Error:", traceback.format_exc())  # Print full traceback
-    session['error_type'] = "404 Not Found"
-    session['error_message'] = "The requested resource could not be found."
-    session['error_code'] = 404
-    return redirect(url_for('error_page'))
-
-@app.errorhandler(500)
-def internal_error(error):
-    print("500 Error:", traceback.format_exc())  # Print full traceback
-    session['error_type'] = "500 Internal Server Error"
-    session['error_message'] = "An unexpected error occurred on the server."
-    session['error_code'] = 500
-    return redirect(url_for('error_page'))
-
-@app.errorhandler(Exception)
-def handle_exception(error):
-    print("Unhandled Exception:", traceback.format_exc())  # Print full traceback
-    session['error_type'] = "Exception"
-    session['error_message'] = str(error)
-    session['error_code'] = 500
-    return redirect(url_for('error_page'))
-
 
 
 if __name__ == "__main__":

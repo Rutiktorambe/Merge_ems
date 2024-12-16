@@ -24,7 +24,7 @@ def filltimesheet():
             session['error_type'] = "Internal Server Error"
             session['error_message'] = "Unable to Submit Timesheet at this  Moment, Please Try After SomeTime."
             session['error_code'] = 500
-            return redirect(url_for('error_page')) 
+            return redirect(url_for('error.error_page')) 
 
     return render_template('timesheet/timesheet-fill/filltimesheet.html', user=current_user)
 
@@ -73,7 +73,7 @@ def submit_timesheet():
         session['error_type'] = "500 Internal Server Error"
         session['error_message'] = "An unexpected error occurred on the server."
         session['error_code'] = 500
-        return redirect(url_for('error_page'))
+        return redirect(url_for('error.error_page'))
 
 @timesheet_bp.route('/success')
 @login_required
@@ -104,7 +104,7 @@ def view_entries(date):
     except Exception as e:
             session['error_type'] = "Internal Server Error"
             session['error_message'] = f"Unable get data for the {date}"
-            return redirect(url_for('error_page'))
+            return redirect(url_for('error.error_page'))
     
 
 
@@ -235,7 +235,7 @@ def timesheet_summary():
             session['error_type'] = "Internal Server Error"
             session['error_message'] = "Unable to get Summery at this Moment"
             session['error_code'] = 500
-            return redirect(url_for('error_page'))
+            return redirect(url_for('error.error_page'))
     
 
 
@@ -333,7 +333,7 @@ def edit_entry(entry_id):
             session['error_type'] = "500 Internal Server Error"
             session['error_message'] = "An unexpected error occurred on the server."
             session['error_code'] = 500
-            return redirect(url_for('error_page'))
+            return redirect(url_for('error.error_page'))
     return render_template('timesheet/timesheet-summery/edit_entry.html', entry=entry, user=current_user)
 
 
