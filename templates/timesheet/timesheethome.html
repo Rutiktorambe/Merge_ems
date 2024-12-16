@@ -14,7 +14,9 @@
     <div class="ts-home">
       <h2>Timesheet Services</h2>
       <ul>
-        <li><a href="{{ url_for('filltimesheet') }}">Fill Timesheet</a></li>
+        <li>
+          <a href="{{ url_for('timesheet.filltimesheet') }}">Fill Timesheet</a>
+        </li>
         <li><a href="{{ url_for('timesheet_summary') }}">View Summary</a></li>
         {% if is_manager %}
         <li>
