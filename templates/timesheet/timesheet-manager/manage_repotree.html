@@ -17,7 +17,7 @@
         <a href="/timesheet" class="ts-nav-link">Timesheet</a>
         <form
           method="POST"
-          action="{{ url_for('manage_repotree') }}"
+          action="{{ url_for('timesheet.manage_repotree') }}"
           class="ts-manager-view-form"
         >
           <input
@@ -39,7 +39,7 @@
           <li class="ts-manager-view-list-item">
             {{ employee.EName }} (ID: {{ employee.EMPID }})
             <a
-              href="{{ url_for('employee_entries', emp_id=employee.EMPID) }}"
+              href="{{ url_for('timesheet.employee_entries', emp_id=employee.EMPID) }}"
               class="ts-manager-view-link"
             >
               View Entries

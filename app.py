@@ -239,59 +239,59 @@ def edit_entry(entry_id):
 
 # -----------------------------------------------------------------Manage_Repotree----------------------------------------------------------
 
-@app.route('/timesheet/manage_repotree', methods=['GET', 'POST'])
-@login_required
-def manage_repotree():
+# @app.route('/timesheet/manage_repotree', methods=['GET', 'POST'])
+# @login_required
+# def manage_repotree():
 
-    search_term = request.form.get('search', '').strip()
-    query = EMPWD.query.filter_by(LineManagerID=current_user.EMPID)
-    if search_term:
-        query = query.filter(EMPWD.EName.ilike(f"%{search_term}%"))
-    employees = query.all()
+#     search_term = request.form.get('search', '').strip()
+#     query = EMPWD.query.filter_by(LineManagerID=current_user.EMPID)
+#     if search_term:
+#         query = query.filter(EMPWD.EName.ilike(f"%{search_term}%"))
+#     employees = query.all()
     
-    return render_template('timesheet/timesheet-manager/manage_repotree.html', employees=employees, search_term=search_term, user=current_user)
+#     return render_template('timesheet/timesheet-manager/manage_repotree.html', employees=employees, search_term=search_term, user=current_user)
 
 
-@app.route('/timesheet/manage_repotree/employee_entries/<emp_id>')
-@login_required
-def employee_entries(emp_id):
-    selected_date_str = request.args.get('selected_date', datetime.utcnow().strftime('%Y-%m-%d'))
-    selected_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
-    week_start = selected_date - timedelta(days=selected_date.weekday())
-    week_end = week_start + timedelta(days=6)
+# @app.route('/timesheet/manage_repotree/employee_entries/<emp_id>')
+# @login_required
+# def employee_entries(emp_id):
+#     selected_date_str = request.args.get('selected_date', datetime.utcnow().strftime('%Y-%m-%d'))
+#     selected_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
+#     week_start = selected_date - timedelta(days=selected_date.weekday())
+#     week_end = week_start + timedelta(days=6)
 
-    entries = TimesheetEntry.query.filter(
-        TimesheetEntry.EmpID == emp_id,
-        TimesheetEntry.DateofEntry >= week_start,
-        TimesheetEntry.DateofEntry <= week_end
-    ).all()
+#     entries = TimesheetEntry.query.filter(
+#         TimesheetEntry.EmpID == emp_id,
+#         TimesheetEntry.DateofEntry >= week_start,
+#         TimesheetEntry.DateofEntry <= week_end
+#     ).all()
 
-    entries_by_date = []
-    for entry in entries:
-        entry_data = {
-            'date': entry.DateofEntry,
-            'day': entry.DateofEntry.strftime('%A'),
-            'hours': entry.Hours,
-            'minutes': entry.Minutes,
-            'allocation_type': entry.AllocationType,
-            'comments': entry.Comment,
-            'project_code': entry.ProjectCode
-        }
-        entries_by_date.append(entry_data)
+#     entries_by_date = []
+#     for entry in entries:
+#         entry_data = {
+#             'date': entry.DateofEntry,
+#             'day': entry.DateofEntry.strftime('%A'),
+#             'hours': entry.Hours,
+#             'minutes': entry.Minutes,
+#             'allocation_type': entry.AllocationType,
+#             'comments': entry.Comment,
+#             'project_code': entry.ProjectCode
+#         }
+#         entries_by_date.append(entry_data)
 
-    prev_week_date = week_start - timedelta(days=7)
-    next_week_date = week_start + timedelta(days=7)
+#     prev_week_date = week_start - timedelta(days=7)
+#     next_week_date = week_start + timedelta(days=7)
 
-    return render_template(
-        'timesheet/timesheet-manager/employee_entries.html',
-        emp_id=emp_id,
-        entries_by_date=entries_by_date,
-        week_start=week_start,
-        week_end=week_end,
-        prev_week_date=prev_week_date,
-        next_week_date=next_week_date,
-         user=current_user
-    )
+#     return render_template(
+#         'timesheet/timesheet-manager/employee_entries.html',
+#         emp_id=emp_id,
+#         entries_by_date=entries_by_date,
+#         week_start=week_start,
+#         week_end=week_end,
+#         prev_week_date=prev_week_date,
+#         next_week_date=next_week_date,
+#          user=current_user
+#     )
     
 # ---------------------------------------------------------Error_Handling---------------------------------------------------
 @app.route('/error')

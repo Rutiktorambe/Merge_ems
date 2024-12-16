@@ -24,7 +24,9 @@
         </li>
         {% if is_manager %}
         <li>
-          <a href="{{ url_for('manage_repotree') }}">Manage Repotree</a>
+          <a href="{{ url_for('timesheet.manage_repotree') }}"
+            >Manage Repotree</a
+          >
         </li>
         {% endif %}
       </ul>

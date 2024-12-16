@@ -26,14 +26,14 @@
 
         <div class="ts-manager-emp-entries-navigation">
           <a
-            href="{{ url_for('employee_entries', emp_id=emp_id, selected_date=prev_week_date) }}"
+            href="{{ url_for('timesheet.employee_entries', emp_id=emp_id, selected_date=prev_week_date) }}"
             class="ts-manager-emp-entries-btn"
           >
             Previous Week
           </a>
           <span>{{ week_start }} - {{ week_end }}</span>
           <a
-            href="{{ url_for('employee_entries', emp_id=emp_id, selected_date=next_week_date) }}"
+            href="{{ url_for('timesheet.employee_entries', emp_id=emp_id, selected_date=next_week_date) }}"
             class="ts-manager-emp-entries-btn"
           >
             Next Week
