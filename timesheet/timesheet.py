@@ -293,3 +293,50 @@ def employee_entries(emp_id):
         next_week_date=next_week_date,
          user=current_user
     )
+
+
+
+
+
+
+
+@timesheet_bp.route('/edit_entry/<entry_id>', methods=['GET', 'POST'])
+@login_required
+def edit_entry(entry_id):
+    entry = TimesheetEntry.query.get(entry_id)
+    
+    if request.method == 'POST':
+        try:
+            entry.DateofEntry = datetime.strptime(request.form['DateofEntry'], '%Y-%m-%d').date()
+            entry.Hours = float(request.form['hours'])
+            entry.Minutes = float(request.form['minutes'])
+            entry.total_time = round(entry.Hours + (entry.Minutes / 60.0), 2)
+            entry.AllocationType = request.form['AllocationType']
+            entry.Category1 = request.form['Category1']
+            entry.Category2 = request.form.get('Category2', '')
+            entry.Category3 = request.form.get('Category3', '')
+            entry.ProjectCode = request.form['ProjectCode']
+            entry.Comment = request.form.get('comments', '')
+            entry.LastUpdatedBy = current_user.username
+            entry.LastUploadDate = datetime.utcnow()
+            entry.billable_time = entry.nonbillable_admin_time = entry.nonbillable_training_time = entry.unavailable_time = 0
+            if entry.AllocationType == 'billable':
+                entry.billable_time = entry.total_time
+            elif entry.AllocationType == 'non-billable':
+                if entry.Category1.lower() == 'admin':
+                    entry.nonbillable_admin_time = entry.total_time
+                elif entry.Category1.lower() == 'training':
+                    entry.nonbillable_training_time = entry.total_time
+                else:
+                    entry.unavailable_time = entry.total_time
+
+            db.session.commit()
+            return redirect(url_for('timesheet.view_entries', date=entry.DateofEntry))
+        
+        except Exception as e:
+            db.session.rollback()
+            session['error_type'] = "500 Internal Server Error"
+            session['error_message'] = "An unexpected error occurred on the server."
+            session['error_code'] = 500
+            return redirect(url_for('error_page'))
+    return render_template('timesheet/timesheet-summery/edit_entry.html', entry=entry, user=current_user)
