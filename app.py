@@ -137,26 +137,6 @@ def leavesystem():
 
 # ______________________________________________________________________
 
-@app.route('/timesheet/history', methods=['POST'])
-@login_required
-def timesheet_history():
-    dates = request.json.get('dates')
-    emp_id = current_user.EMPID
-
-    if dates:
-        history = {}
-        for date in dates:
-            total_time_query = db.session.query(
-                db.func.coalesce(db.func.sum((TimesheetEntry.Hours * 60) + TimesheetEntry.Minutes ),0)
-                ).filter(
-                TimesheetEntry.DateofEntry == date,
-                TimesheetEntry.EmpID == emp_id
-            ).scalar()
-            total_time_in_hours = round(total_time_query / 60, 2) if total_time_query else 0.0
-
-            history[date] = total_time_in_hours
-        return jsonify(history)
-    return jsonify({})
 
 # ______________________________________________________________________
 
