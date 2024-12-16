@@ -20,7 +20,7 @@
       <div class="ts-summary-container">
         <h1 class="ts-summary-title">Weekly Summary</h1>
         <form
-          action="{{ url_for('timesheet_summary') }}"
+          action="{{ url_for('timesheet.timesheet_summary') }}"
           method="get"
           class="ts-summary-form"
         >
@@ -36,13 +36,13 @@
         </form>
         <div class="ts-summary-navigation">
           <a
-            href="{{ url_for('timesheet_summary', selected_date=prev_week_date) }}"
+            href="{{ url_for('timesheet.timesheet_summary', selected_date=prev_week_date) }}"
             class="ts-summary-link"
             >Previous Week</a
           >
           <span>{{ week_start }} - {{ week_end }}</span>
           <a
-            href="{{ url_for('timesheet_summary', selected_date=next_week_date) }}"
+            href="{{ url_for('timesheet.timesheet_summary', selected_date=next_week_date) }}"
             class="ts-summary-link"
             >Next Week</a
           >
