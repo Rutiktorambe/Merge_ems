@@ -1,10 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_user, logout_user, login_required, current_user
-from flask import Flask, render_template, redirect, url_for, flash, request , session ,send_from_directory
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from models import db, EMPWD
-from datetime import timedelta
-import os 
+from flask import Flask, Blueprint, render_template, redirect, url_for, flash, request, session, send_from_directory, jsonify, current_app
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from models import db, EMPWD, TimesheetEntry, Resourceinfo, Training, TrainingRegistration
+from datetime import datetime, timedelta, timezone
+import os
+import uuid
+import traceback
 
 auth = Blueprint('auth', __name__)
 

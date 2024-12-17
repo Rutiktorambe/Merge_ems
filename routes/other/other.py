@@ -6,17 +6,15 @@ import os
 import uuid
 import traceback
 
-home_bp = Blueprint('home', __name__)
+other_bp = Blueprint('other', __name__)
 
 
-
-@home_bp.route('/home')
+@other_bp.route('/comingsoon')
 @login_required
-def home():
-    return render_template('home/home.html', user=current_user)
+def comingsoon():
+    return render_template('comingsoon/comingsoon.html', user=current_user)
 
-
-@home_bp.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(current_app.root_path, 'static'),
-                               'images/favicon.ico', mimetype='image/vnd.microsoft.icon')
+@other_bp.route('/leavesystem')
+@login_required
+def leavesystem():
+    return render_template('leavesystem/leavesystem.html', user=current_user)

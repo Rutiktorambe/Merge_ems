@@ -1,8 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, flash, request , session ,send_from_directory
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from models import db, EMPWD
-from datetime import timedelta
-import os 
+from flask import Flask, Blueprint, render_template, redirect, url_for, flash, request, session, send_from_directory, jsonify, current_app
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from models import db, EMPWD, TimesheetEntry, Resourceinfo, Training, TrainingRegistration
+from datetime import datetime, timedelta, timezone
+import os
+import uuid
+import traceback
 from routes  import timesheet_bp ,error_bp  ,auth ,home_bp
 
 
@@ -40,15 +42,7 @@ print(app.url_map)
 
 # ----------------------------------------------------------Home----------------------------------------------------------------------
 
-@app.route('/comingsoon')
-@login_required
-def comingsoon():
-    return render_template('comingsoon/comingsoon.html', user=current_user)
 
-@app.route('/leavesystem')
-@login_required
-def leavesystem():
-    return render_template('leavesystem/leavesystem.html', user=current_user)
 
 
 if __name__ == "__main__":
