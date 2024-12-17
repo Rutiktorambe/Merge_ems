@@ -30,20 +30,12 @@ def load_user(user_id):
     session = db.session 
     return session.get(EMPWD, user_id)
 
-# ----------------------------------------------------------------Auth_Routes---------------------------------------------------
-
 
 app.register_blueprint(error_bp) 
 app.register_blueprint(auth)
 app.register_blueprint(home_bp)
 app.register_blueprint(timesheet_bp)
 print(app.url_map)
-
-
-# ----------------------------------------------------------Home----------------------------------------------------------------------
-
-
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=5000, debug=True)
