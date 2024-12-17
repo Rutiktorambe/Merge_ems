@@ -1,1 +1,1 @@
-from other import other_bp
+from .other import other_bp

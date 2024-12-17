@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 import os
 import uuid
 import traceback
-from routes  import timesheet_bp ,error_bp  ,auth ,home_bp
+from routes  import timesheet_bp ,error_bp  ,auth ,home_bp ,other_bp
 
 
 app = Flask(__name__)
@@ -35,6 +35,8 @@ app.register_blueprint(error_bp)
 app.register_blueprint(auth)
 app.register_blueprint(home_bp)
 app.register_blueprint(timesheet_bp)
+app.register_blueprint(other_bp)
+
 print(app.url_map)
 
 if __name__ == "__main__":
