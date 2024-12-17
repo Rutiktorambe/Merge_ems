@@ -29,7 +29,7 @@ def login():
                 message= 'Incorrect password'
             else:
                 login_user(user)
-                return redirect(url_for('home'))
+                return redirect(url_for('home.home'))
         
         except Exception as e:
             db.session.rollback()

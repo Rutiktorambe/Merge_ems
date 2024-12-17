@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from models import db, EMPWD
 from datetime import timedelta
 import os 
-from routes  import timesheet_bp ,error_bp  ,auth
+from routes  import timesheet_bp ,error_bp  ,auth ,home_bp
 
 
 app = Flask(__name__)
@@ -31,32 +31,20 @@ def load_user(user_id):
 # ----------------------------------------------------------------Auth_Routes---------------------------------------------------
 
 
-# Register the timesheet blueprint
-app.register_blueprint(timesheet_bp)
 app.register_blueprint(error_bp) 
 app.register_blueprint(auth)
+app.register_blueprint(home_bp)
+app.register_blueprint(timesheet_bp)
 print(app.url_map)
 
 
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'images/favicon.ico', mimetype='image/vnd.microsoft.icon')
-
 # ----------------------------------------------------------Home----------------------------------------------------------------------
 
-@app.route('/home')
-@login_required
-def home():
-    return render_template('home/home.html', user=current_user)
-# -----------------------------------------------------------------------------------
 @app.route('/comingsoon')
 @login_required
 def comingsoon():
     return render_template('comingsoon/comingsoon.html', user=current_user)
 
-# -----------------------------------------------------------------------------------
 @app.route('/leavesystem')
 @login_required
 def leavesystem():
