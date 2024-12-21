@@ -45,7 +45,7 @@ class EMPWD(db.Model, UserMixin):
         return self.EMPID
 
 class TimesheetEntry(db.Model):
-    __tablename__ = 'timesheet_entries'
+    __tablename__ = 'Timesheet_database'
     
     Uniq_ID = db.Column(db.String(255), primary_key=True)
     EmpID = db.Column(db.String(10), nullable=False)
@@ -82,7 +82,7 @@ class TimesheetEntry(db.Model):
         return f'<TimesheetEntry {self.Uniq_ID}>'
 
 class Resourceinfo(db.Model, UserMixin):
-    __tablename__ = 'Resourceinfo'
+    __tablename__ = 'ResourceInfo'
     
     ProjectCode = db.Column(db.String(100),primary_key=True)
     SSMA_Timestamp = db.Column(
@@ -107,21 +107,9 @@ class Resourceinfo(db.Model, UserMixin):
     def __repr__(self):
         return f"<Resourceinfo(ProjectCode={self.ProjectCode}, ProjectName={self.ProjectName}, EmpID={self.EmpID})>"
 
-# class TrainingRegistration(db.Model, UserMixin):
-#     __tablename__ = 'TrainingRegistration'
-#     TID = db.Column(db.String(255), nullable=False,primary_key=True)
-#     EmpID = db.Column(db.String(255), nullable=False)
-#     Status = db.Column(db.String(255), nullable=False)
-#     TName = db.Column(db.String(255), nullable=False)
-#     Mode = db.Column(db.String(255), nullable=False)
 
-#     def __repr__(self):
-#         return f"<TrainingRegistration(TID={self.TID}, EmpID={self.EmpID})>"
-
-
-
-class Training(db.Model, UserMixin):
-    __tablename__ = 'trainings'
+class Trainings(db.Model, UserMixin):
+    __tablename__ = 'Trainings'
     TID = db.Column(db.String(255), nullable=False, primary_key=True)
     EmpID = db.Column(db.String(255), nullable=False)
     TName = db.Column(db.String(255), nullable=False)
