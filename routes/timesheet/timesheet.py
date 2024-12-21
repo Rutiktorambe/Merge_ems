@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, render_template, redirect, url_for, flash, request, session, send_from_directory, jsonify, current_app
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from models import db, EMPWD, TimesheetEntry, Resourceinfo, Training, TrainingRegistration
+from models import db, EmpWD, TimesheetEntry, Resourceinfo, Trainings, TrainingRegistration
 from datetime import datetime, timedelta, timezone
 import os
 import uuid
@@ -12,7 +12,7 @@ timesheet_bp = Blueprint('timesheet', __name__, url_prefix='/timesheet')
 @timesheet_bp.route('/')
 @login_required
 def timesheethome():
-    is_manager = db.session.query(EMPWD).filter_by(LineManagerID=str(current_user.EMPID)).first() is not None
+    is_manager = db.session.query(EmpWD).filter_by(LineManagerID=str(current_user.EMPID)).first() is not None
     return render_template('timesheet/timesheethome.html', is_manager=is_manager, user=current_user)
 
 @timesheet_bp.route('/fill', methods=['GET', 'POST'])
@@ -247,9 +247,9 @@ def timesheet_summary():
 def manage_repotree():
 
     search_term = request.form.get('search', '').strip()
-    query = EMPWD.query.filter_by(LineManagerID=current_user.EMPID)
+    query = EmpWD.query.filter_by(LineManagerID=current_user.EMPID)
     if search_term:
-        query = query.filter(EMPWD.EName.ilike(f"%{search_term}%"))
+        query = query.filter(EmpWD.EName.ilike(f"%{search_term}%"))
     employees = query.all()
     
     return render_template('timesheet/timesheet-manager/manage_repotree.html', employees=employees, search_term=search_term, user=current_user)
@@ -373,16 +373,16 @@ def get_projects_dates(projectCode):
 @login_required
 def get_trainings(training):
     if training.lower() == "internal":
-        trainings = TrainingRegistration.query.join(Training, TrainingRegistration.TID == Training.TID) \
-            .filter(Training.TType == "Internal",TrainingRegistration.EmpID == current_user.EMPID).all()
+        trainings = TrainingRegistration.query.join(Trainings, TrainingRegistration.TID == Trainings.TID) \
+            .filter(Trainings.TType == "Internal",TrainingRegistration.EmpID == current_user.EMPID).all()
     elif training.lower() == "external":
-        trainings = TrainingRegistration.query.join(Training, TrainingRegistration.TID == Training.TID) \
-            .filter(Training.TType == "External", TrainingRegistration.EmpID == current_user.EMPID).all()
+        trainings = TrainingRegistration.query.join(Trainings, TrainingRegistration.TID == Trainings.TID) \
+            .filter(Trainings.TType == "External", TrainingRegistration.EmpID == current_user.EMPID).all()
     else:
         trainings = []
     if trainings:
         trainings_data = [
-            {"TID": training.TID, "TName": Training.query.filter_by(TID=training.TID).first().TName} 
+            {"TID": training.TID, "TName": Trainings.query.filter_by(TID=training.TID).first().TName} 
             for training in trainings
         ]
     else:

@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, render_template, redirect, url_for, flash, request, session, send_from_directory, jsonify, current_app
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from models import db, EMPWD, TimesheetEntry, Resourceinfo, Training, TrainingRegistration
+from models import db, EmpWD, TimesheetEntry, Resourceinfo, Trainings, TrainingRegistration
 from datetime import datetime, timedelta, timezone
 import os
 import uuid
@@ -28,7 +28,7 @@ login_manager.login_view = 'auth.login'
 @login_manager.user_loader
 def load_user(user_id):
     session = db.session 
-    return session.get(EMPWD, user_id)
+    return session.get(EmpWD, user_id)
 
 
 app.register_blueprint(error_bp) 

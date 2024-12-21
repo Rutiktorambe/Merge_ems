@@ -4,8 +4,8 @@ from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
-class EMPWD(db.Model, UserMixin):
-    __tablename__ = 'EMPWD'
+class EmpWD(db.Model, UserMixin):
+    __tablename__ = 'EmpWD'
     
     EMPID = db.Column(db.String(255), primary_key=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
