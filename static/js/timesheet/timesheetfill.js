@@ -111,7 +111,7 @@ async function updateCategories() {
         const selectedOption = category2.options[category2.selectedIndex];
         const selectedProjectCode = selectedOption.getAttribute("data-code");
 
-        category3.innerHTML = "";
+        category3.innerHTML = "<option value=''>Select</option>";
         projectCode.value = selectedProjectCode;
 
         if (
